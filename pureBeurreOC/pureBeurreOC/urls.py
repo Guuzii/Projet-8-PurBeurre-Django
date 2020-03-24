@@ -22,7 +22,7 @@ from products import views
 urlpatterns = [
     path('', views.index),
     path('products/', include('products.urls')),
-    path('admin/', admin.site.urls),
+    path('vigile/', admin.site.urls),
 ]
 
 if settings.DEBUG:
