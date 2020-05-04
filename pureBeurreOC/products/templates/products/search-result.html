@@ -4,18 +4,39 @@
 
     <section class="page-section">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h2>Vous pouvez remplacer cet aliment par :</h2>
-                    <hr class="divider my-4" />
+            {% if products|length > 0 %}
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div>
+                            <p>{{ searched_product.name }}</p>
+                            <p>{{ searched_product.url }}</p>
+                            <p>{{ searched_product.image_url }}</p>
+                            <p>{{ searched_product.nutri_score }}</p>
+                        </div>
+                        <h2>Vous pouvez remplacer cet aliment par :</h2>
+                        <hr class="divider my-4" />
+                    </div>
                 </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-12 mb-4">
-                    <p>aliments à afficher</p>
+                
+                <div class="row">
+                    <div class="col-md-12 mb-4">                    
+                        {% for product in products %}
+                            <div>
+                                <p>{{ product.name }}</p>
+                                <p>{{ product.url }}</p>
+                                <p>{{ product.image_url }}</p>
+                                <p>{{ product.nutri_score }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h2>Aucun produits trouvés par rapport à votre recherche</h2>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>    
 

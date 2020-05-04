@@ -1,0 +1,9 @@
+{% block search_form %}
+
+<form action="{% url 'product-search-results' %}">
+    {{ search_form.product_name }}
+    
+    <button type="submit" class="btn btn-primary"><i class="fas fa-arrow-right"></i></button>
+</form>
+
+{% endblock %}

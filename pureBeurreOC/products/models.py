@@ -17,7 +17,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255, unique=True)
     url = models.URLField(max_length=255, unique=True)
-    image_url = models.URLField(max_length=255, unique=True)
+    image_url = models.URLField(max_length=255, unique=True, null= True)
     nutri_score = models.CharField(max_length=1)
     nutriments = models.ManyToManyField('products.Nutriment', through='products.ProductNutriments')
     categories = models.ManyToManyField('products.Category', through='products.ProductCategories')
@@ -28,7 +28,7 @@ class Product(models.Model):
 class ProductNutriments(models.Model):
     product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
     nutriment = models.ForeignKey('products.Nutriment', on_delete=models.CASCADE)
-    quantity = models.FloatField()
+    quantity = models.FloatField(null= True)
 
 class ProductCategories(models.Model):
     product = models.ForeignKey('products.Product', on_delete=models.CASCADE)

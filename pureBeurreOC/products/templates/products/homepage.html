@@ -13,7 +13,13 @@
                 </div>
                 <div class="col-lg-8 align-self-baseline">
                     <h2 class="text-white-75 font-weight-light mb-5">Trouvez un produit de substitution pour ceux que vous consommez tous les jours.</h2>
-                    <input type="text" name="productSearch" id="productSearch">
+                    <!-- <form action="{% url 'product-search-results' %}">
+                        {{ search_form.product_name }}
+                        <button type="submit" class="btn btn-success"><i class="fas fa-arrow-right"></i></button>
+                    </form> -->
+                    
+                    {% include './form-search.html' %}
+
                 </div>
             </div>
         </div>

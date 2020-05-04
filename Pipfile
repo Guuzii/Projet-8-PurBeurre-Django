@@ -10,6 +10,7 @@ pylint = "*"
 django = "*"
 psycopg2 = "*"
 django-debug-toolbar = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"

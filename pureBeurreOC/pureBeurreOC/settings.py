@@ -25,7 +25,7 @@ SECRET_KEY = '%!p7ld+l#wxdmmo4u(7@swrvap*$05wom^6!q-flp$w+2#%$t-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -126,3 +126,38 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Open Food Facts API requests variables
+
+USER_AGENT_OFF = "Pur Beurre Django - Projet étudiant - Python - Version 3.7.3"
+
+NB_PRODUCTS_TO_GET = 100
+
+PRODUCTS_CATEGORIES = {
+    "plant-based-foods": "Fruits, Légumes, Plantes",
+    "cereals-and-potatoes": "Féculents",
+    "meats": "Viandes",
+    "fishes": "Poissons",
+    "desserts": "Desserts",
+    "beverages": "Boissons"
+}
+
+NUTRIMENTS = {
+    "fat": {
+        "name": "matières grasses / lipides",
+        "unit": "g"
+    },
+    "saturated-fat": {
+        "name": "acide gras saturés",
+        "unit": "g"
+    },
+    "sugars": {
+        "name": "sucres",
+        "unit": "g"
+    },
+    "salt": {
+        "name": "sel",
+        "unit": "g"
+    }
+}

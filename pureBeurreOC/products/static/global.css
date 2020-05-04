@@ -11,12 +11,26 @@
     justify-content: space-between;
 }
 
+#mainNav .btn {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+#mainNav .btn:hover {
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62;
+  }
+
 header.masthead {
     background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("./assets/img/fond-header.jpg") !important;
 }
 
 header.resultHead {
-    background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%) !important;
+    background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%);
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     max-height: 50vh;
     min-height: unset;
     padding: 4.5rem;
