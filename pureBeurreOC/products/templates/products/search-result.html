@@ -6,26 +6,52 @@
         <div class="container">
             {% if products|length > 0 %}
                 <div class="row">
-                    <div class="col-md-12 text-center">
-                        <div>
-                            <p>{{ searched_product.name }}</p>
-                            <p>{{ searched_product.url }}</p>
-                            <p>{{ searched_product.image_url }}</p>
-                            <p>{{ searched_product.nutri_score }}</p>
+                    <div class="col-md-12 text-center d-flex flex-column align-items-center">
+                        <div class="col-md-4 product-card">
+                            <div class="card-content">
+                                <div class="product-img">
+                                    <div class="nutriscore">
+                                        <img src="../../static/assets/img/nutriscore-{{ searched_product.nutri_score }}.svg" alt="">
+                                    </div>
+                                    <img src="{{ searched_product.image_url }}" alt="image {{ searched_product.name }}">
+                                </div>
+                                <div>                                
+                                    <div><hr class="divider my-4" /></div>
+                                    <p>{{ searched_product.name }}</p>
+                                    <p><a href="{% url 'product-details' product_id=searched_product.id %}">Détails du produit</a></p>
+                                </div>
+                            </div>                                                        
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
                         <h2>Vous pouvez remplacer cet aliment par :</h2>
                         <hr class="divider my-4" />
                     </div>
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-12 mb-4">                    
+                    <div class="col-md-12 text-center d-flex flex-wrap">                    
                         {% for product in products %}
-                            <div>
-                                <p>{{ product.name }}</p>
-                                <p>{{ product.url }}</p>
-                                <p>{{ product.image_url }}</p>
-                                <p>{{ product.nutri_score }}</p>
+                            <div class="col-md-4 product-card">                                
+                                <div class="card-content">
+                                    <div class="hover-div" data="{{ product.id }}"></div>
+                                    <div class="nutriscore">
+                                        <img src="../../static/assets/img/nutriscore-{{ product.nutri_score }}.svg" alt="">
+                                    </div>
+                                    <div class="product-img">                                        
+                                        <img src="{{ product.image_url }}" alt="image {{ product.name }}">
+                                    </div>
+                                    <div>                                    
+                                        <div><hr class="divider my-4" /></div>                                    
+                                        <p>{{ product.name }}</p>
+                                        <div class="save-div">
+                                            <p class="text-primary">Sauvegarder</p>
+                                        </div>
+                                    </div>
+                                </div>                                                            
                             </div>
                         {% endfor %}
                     </div>
