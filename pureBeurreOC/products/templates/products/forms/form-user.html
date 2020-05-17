@@ -1,0 +1,23 @@
+{% block user_form %}
+
+<form action="{% url 'user-create' %}" method="POST">
+    {% csrf_token %}
+
+    <label for="username">Identifiant : </label>
+    {{ user_form.username }}
+
+    <label for="first_name">Nom d'utilisateur : </label>
+    {{ user_form.first_name }}
+
+    <label for="email">Email : </label>
+    {{ user_form.email }}
+
+    <label for="password">Mot de passe : </label>
+    {{ user_form.password }}
+    
+    <br>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}

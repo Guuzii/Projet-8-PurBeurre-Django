@@ -32,13 +32,15 @@
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
                         <li class="nav-item" id="navSearch">
                             <!-- <input type="text" name="navSearch" id="navSearch" placeholder="Chercher"> -->
-                            {% include 'products/form-search.html' %}
+                            {% include 'products/forms/form-search.html' %}
                         </li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services"><i class="far fa-user fa-2x"></i></a></li>
-                        <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio"><img src="../static/assets/img/noun_Carrot_29691.png" alt="Carrot by Fabien Jouin from the Noun Project" style="max-width: 40px;"></a></li> -->
-                        <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio"><img src="../static/assets/img/noun_Carrot_29691.svg" alt="Carrot by Fabien Jouin from the Noun Project" style="width: 30px; height: 30px;"></a></li> -->
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'product-user-results' %}"><i class="fas fa-carrot fa-2x"></i></a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact"><i class="fas fa-sign-in-alt fa-2x"></i></a></li>
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'user' %}"><i class="far fa-user fa-2x"></i></a></li>
+                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'product-user-results' %}"><i class="fas fa-carrot fa-2x"></i></a></li>
+                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt fa-2x"></i></a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'login' %}"><i class="fas fa-sign-in-alt fa-2x"></i></a></li>
+                        {% endif %}                        
                     </ul>
                 </div>
             </div>

@@ -1,0 +1,17 @@
+{% block login_form %}
+
+<form action="{% url 'login' %}" method="POST">
+    {% csrf_token %}
+
+    <label for="username">Identifiant : </label>
+    {{ login_form.username }}
+
+    <label for="password">Mot de passe : </label>
+    {{ login_form.password }}
+    
+    <br>
+    
+    <button type="submit" class="btn btn-primary">Connexion</button>
+</form>
+
+{% endblock %}
