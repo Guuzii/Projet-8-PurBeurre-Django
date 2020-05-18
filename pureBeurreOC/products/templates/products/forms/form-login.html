@@ -1,12 +1,24 @@
 {% block login_form %}
 
+{% if errors %}
+    <div style="color: red;">
+        {% for key, error in errors %}
+            {% autoescape off %}
+                {{ error }}
+            {% endautoescape %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<br>
+
 <form action="{% url 'login' %}" method="POST">
     {% csrf_token %}
 
-    <label for="username">Identifiant : </label>
+    <label for="{{ form.name.id_for_label }}">Identifiant : </label>
     {{ login_form.username }}
 
-    <label for="password">Mot de passe : </label>
+    <label for="{{ form.name.id_for_label }}">Mot de passe : </label>
     {{ login_form.password }}
     
     <br>

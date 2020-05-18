@@ -1,6 +1,8 @@
 {% block search_form %}
 
-<form action="{% url 'product-search-results' %}">
+<form action="{% url 'product-search-results' %}" method="POST">
+    {% csrf_token %}
+    
     {{ search_form.product_name }}
     
     <button type="submit" class="btn btn-primary"><i class="fas fa-arrow-right"></i></button>

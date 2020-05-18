@@ -1,18 +1,30 @@
 {% block user_form %}
 
+{% if errors %}
+    <div style="color: red;">
+        {% for key, error in errors %}
+            {% autoescape off %}
+                {{ error }}
+            {% endautoescape %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<br>
+
 <form action="{% url 'user-create' %}" method="POST">
     {% csrf_token %}
 
-    <label for="username">Identifiant : </label>
+    <label for="{{ form.name.id_for_label }}">Identifiant : </label>
     {{ user_form.username }}
 
-    <label for="first_name">Nom d'utilisateur : </label>
+    <label for="{{ form.name.id_for_label }}">Nom d'utilisateur : </label>
     {{ user_form.first_name }}
 
-    <label for="email">Email : </label>
+    <label for="{{ form.name.id_for_label }}">Email : </label>
     {{ user_form.email }}
 
-    <label for="password">Mot de passe : </label>
+    <label for="{{ form.name.id_for_label }}">Mot de passe : </label>
     {{ user_form.password }}
     
     <br>

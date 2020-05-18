@@ -17,8 +17,9 @@ user_form_default = UserForm()
 login_form_default = LoginForm()
 
 def index(request):
+    search_form = SearchForm()
     context = {
-        'search_form': search_form_default
+        'search_form': search_form
     }
 
     return render(request, 'products/homepage.html', context)
@@ -26,9 +27,11 @@ def index(request):
 
 @login_required()
 def user(request):
+    search_form = SearchForm()
+
     context = {
         'title': 'Salut ' + request.user.first_name + ' !',
-        'search_form': search_form_default
+        'search_form': search_form
     }
 
     return render(request, 'products/user-details.html', context)
@@ -37,7 +40,6 @@ def user(request):
 def userCreate(request):
     context = {
         'title': 'Nouvel utilisateur',
-        'user_form': user_form_default,
         'search_form': search_form_default
     }
 
@@ -45,31 +47,51 @@ def userCreate(request):
         form = UserForm(request.POST)
 
         if form.is_valid():
-            created_user = User.objects.create_user(
-                username=form.cleaned_data['username'], 
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password'],
-                first_name=form.cleaned_data['first_name']
-            )
+            if not User.objects.filter(username__iexact=form.cleaned_data['username']).exists():
+                if not User.objects.filter(email__iexact=form.cleaned_data['email']).exists():
+                    created_user = User.objects.create_user(
+                        username=form.cleaned_data['username'], 
+                        email=form.cleaned_data['email'],
+                        password=form.cleaned_data['password'],
+                        first_name=form.cleaned_data['first_name']
+                    )
 
-            authenticated_user = authenticate(username=created_user.username, password=form.cleaned_data['password'])
+                    if created_user is not None:
+                        authenticated_user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+                        
+                        if authenticated_user is not None:
+                            login(request, authenticated_user)
 
-            if authenticated_user is not None:
-                login(request, authenticated_user)
+                            return redirect('home')
+                        else:
+                            context['errors'] = [('user-auth', "Problème lors de l'authentification de l'utilisateur")]
 
-                return redirect('home')
+                    else:
+                        context['errors'] = [('user-create', "Problème lors de la création de l'utilisateur.")]
+                
+                else:
+                    context['errors'] = [('email', 'Un utilisateur avec cet email existe déjà.')]
+            
             else:
-                return render(request, 'products/user-create.html', context)            
+                context['errors'] = [('username', "Un utilisateur avec cet identifiant existe déjà")]
+        
         else:
-            return render(request, 'products/user-create.html', context)
+            context['errors'] = form.errors.items()
+
     else:
-        return render(request, 'products/user-create.html', context)
+        form = UserForm()
+    
+    # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    # print(context['errors'])
+    # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    
+    context['user_form'] = form
+    return render(request, 'products/user-create.html', context)
 
 
 def UserLogin(request):
     context = {
         'title': 'Connexion utilisateur',
-        'login_form': login_form_default,
         'search_form': search_form_default
     }
 
@@ -84,11 +106,14 @@ def UserLogin(request):
 
                 return redirect('home')
             else:
-                return render(request, 'products/user-login.html', context)
+                context['errors'] = [('user-login', "L'identifiant et/ou le mot de passe ne correspondent pas.")]
         else:
-            return render(request, 'products/user-login.html', context)
+            context['errors'] = form.errors.items()
     else:
-        return render(request, 'products/user-login.html', context)    
+        form = LoginForm()
+
+    context['login_form'] = form   
+    return render(request, 'products/user-login.html', context)    
 
 
 @login_required()
@@ -98,24 +123,32 @@ def UserLogout(request):
 
 
 def searchResults(request):
-    form = SearchForm(request.GET)
-
-    if form.is_valid():
-        product_name = form.cleaned_data['product_name']
-        searched_product = Product.objects.filter(name__icontains=product_name).first()
-        if searched_product:
-            substitutes_products = Product.objects.filter(categories=searched_product.categories.first()).exclude(name__exact=searched_product.name).order_by('nutri_score')[:12]
-        else:
-            substitutes_products = None
-
     context = {
-        'title': 'produit trouvé pour la recherche : "' + product_name + '"',
-        'searched_product': searched_product,
-        'products': substitutes_products,
         'search_form': search_form_default
     }
 
-    return render(request, 'products/result-search.html', context)
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            product_name = form.cleaned_data['product_name']
+            searched_product = Product.objects.filter(name__icontains=product_name).first()
+
+            if searched_product:
+                substitutes_products = Product.objects.filter(categories=searched_product.categories.first()).exclude(name__exact=searched_product.name).order_by('nutri_score')[:12]
+            else:
+                substitutes_products = None    
+
+            context['title'] = 'produit trouvé pour la recherche : "' + product_name + '"'
+            context['searched_product'] = searched_product
+            context['products'] = substitutes_products
+
+            return render(request, 'products/result-search.html', context)
+        else:
+            context['errors'] = form.errors.items()
+    
+    else:
+        return redirect('home')
 
 
 @login_required()
@@ -132,11 +165,6 @@ def productDetails(request, product_id):
     searched_product = Product.objects.filter(id=product_id).first()
     product_nutriments = searched_product.nutriments.all()
     clean_nutriments = []
-
-    # print(settings.NUTRIMENTS['fat'])
-
-    # for test in settings.NUTRIMENTS:
-    #     print(test)
 
     for nutriment in product_nutriments:
         clean_nutriments.append({
