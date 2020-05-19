@@ -5,14 +5,12 @@ from . import views
 
 
 urlpatterns = [    
-    path('', views.index, name='home'),
-    path('user/', views.user, name='user'),
-    # path('user/login', auth_views.LoginView, name='login'),
-    # path('user/logout', auth_views.LogoutView, name='logout'),
-    path('user/sign-up', views.userCreate, name='user-create'),
-    path('user/login', views.UserLogin, name='login'),
-    path('user/logout', views.UserLogout, name='logout'),
-    path('search-results/', views.searchResults, name='product-search-results'),
-    path('user-results/', views.userResults, name='product-user-results'),
-    path('details/<int:product_id>', views.productDetails, name='product-details'),
+    path('', views.HomeView.as_view(), name='home'),
+    path('user/', views.UserView.as_view(), name='user'),
+    path('user/login', views.UserLogin.as_view(), name='login'),
+    path('user/logout', views.UserLogout.as_view(), name='logout'),
+    path('user/sign-up', views.UserCreate.as_view(), name='user-create'),
+    path('search-results/', views.SearchResult.as_view(), name='product-search-results'),
+    path('user-results/', views.UserResults.as_view(), name='product-user-results'),
+    path('details/<int:product_id>', views.ProductDetails.as_view(), name='product-details'),
 ]

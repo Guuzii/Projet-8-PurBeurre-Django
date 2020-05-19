@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Nutriment(models.Model):
@@ -29,6 +30,7 @@ class Product(models.Model):
     nutri_score = models.CharField("Score nutritionnel", max_length=1)
     nutriments = models.ManyToManyField('products.Nutriment', through='products.ProductNutriments')
     categories = models.ManyToManyField('products.Category', through='products.ProductCategories')
+    # users = models.ManyToManyField('User', through='products.ProductUsers')
 
     class Meta:
         verbose_name = "Produit"
@@ -45,3 +47,7 @@ class ProductNutriments(models.Model):
 class ProductCategories(models.Model):
     product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
     category = models.ForeignKey('products.Category', on_delete=models.CASCADE)
+
+# class ProductUsers(models.Model):
+#     product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+#     user = models.ForeignKey('User', on_delete=models.CASCADE)

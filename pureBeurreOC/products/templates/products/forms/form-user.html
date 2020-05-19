@@ -15,19 +15,17 @@
 <form action="{% url 'user-create' %}" method="POST">
     {% csrf_token %}
 
-    <label for="{{ form.name.id_for_label }}">Identifiant : </label>
-    {{ user_form.username }}
-
-    <label for="{{ form.name.id_for_label }}">Nom d'utilisateur : </label>
-    {{ user_form.first_name }}
-
-    <label for="{{ form.name.id_for_label }}">Email : </label>
-    {{ user_form.email }}
-
-    <label for="{{ form.name.id_for_label }}">Mot de passe : </label>
-    {{ user_form.password }}
-    
-    <br>
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+              <div class="form-text text-muted">
+                <small>{{ field.help_text }}</small>
+              </div>
+            {% endif %}
+        </div>
+    {% endfor %}
     
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

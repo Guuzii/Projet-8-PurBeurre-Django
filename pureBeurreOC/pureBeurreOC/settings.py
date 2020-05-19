@@ -26,6 +26,7 @@ SECRET_KEY = '%!p7ld+l#wxdmmo4u(7@swrvap*$05wom^6!q-flp$w+2#%$t-'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
+LOGIN_REDIRECT_URL = '/products/'
 
 
 # Application definition

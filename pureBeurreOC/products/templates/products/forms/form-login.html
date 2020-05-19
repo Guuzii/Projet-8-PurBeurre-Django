@@ -1,12 +1,8 @@
 {% block login_form %}
 
-{% if errors %}
+{% if form.errors %}
     <div style="color: red;">
-        {% for key, error in errors %}
-            {% autoescape off %}
-                {{ error }}
-            {% endautoescape %}
-        {% endfor %}
+        L'identifiant et/ou le mot de passe ne correspondent pas.
     </div>
 {% endif %}
 
@@ -14,14 +10,12 @@
 
 <form action="{% url 'login' %}" method="POST">
     {% csrf_token %}
-
-    <label for="{{ form.name.id_for_label }}">Identifiant : </label>
-    {{ login_form.username }}
-
-    <label for="{{ form.name.id_for_label }}">Mot de passe : </label>
-    {{ login_form.password }}
-    
-    <br>
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+    {% endfor %}
     
     <button type="submit" class="btn btn-primary">Connexion</button>
 </form>
