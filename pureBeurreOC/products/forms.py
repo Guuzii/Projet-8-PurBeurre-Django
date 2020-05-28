@@ -57,8 +57,7 @@ class UserCreateForm(UserCreationForm):
             raise ValidationError("Un utilisateur avec l'email %(email)s existe déjà.", code='email', params={'email': email})
 
         return email
-        
-    
+
 class LoginForm(AuthenticationForm):    
     username = UsernameField(
         label='Identifiant',

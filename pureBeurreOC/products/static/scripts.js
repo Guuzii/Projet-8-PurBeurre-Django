@@ -17,6 +17,31 @@ $(".product-card .hover-div").mouseleave((e) => {
     }, 100);
 });
 
+// Navigate to product details
 $(".product-card .hover-div").click((e) => {
     window.location.assign('/products/details/' + $(e.target).attr("data"));
+});
+
+// AJAX call to save a product for actual user
+$(".save-div p").click((e) => {
+    $.ajax({
+        type: "GET",
+        url: '/products/user-save-product/' + $(e.target).attr("data"),
+        success: (data) => {
+            $("#save-product-message").text("Le produit " + data['product_name'] + " a été " + data['response']);
+            $("#save-product-message").show();
+            setTimeout(function() { 
+                $("#save-product-message").hide();
+            }, 1500);
+            
+            if (data['saved']) {
+                $(e.target).text("Retirer des favoris");
+                $(e.target).css("background", "red");
+            }
+            else {
+                $(e.target).text("Ajouter aux favoris");
+                $(e.target).css("background", "green");
+            }
+        }
+    });
 });

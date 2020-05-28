@@ -11,11 +11,35 @@
                 </div>
             </div>
             
-            <div class="row">
-                <div class="col-md-12 mb-4">
-                    <p>aliments à afficher</p>
+            {% if products|length > 0 %}
+                <div class="row">
+                    <div class="col-md-12 text-center d-flex flex-wrap">                    
+                        {% for product in products %}
+                            <div class="col-md-4 product-card">                                
+                                <div class="card-content">
+                                    <div class="hover-div" data="{{ product.id }}"></div>
+                                    <div class="nutriscore">
+                                        <img src="../../static/assets/img/nutriscore-{{ product.nutri_score }}.svg" alt="">
+                                    </div>
+                                    <div class="product-img">                                        
+                                        <img src="{{ product.image_url }}" alt="image {{ product.name }}">
+                                    </div>
+                                    <div>                                    
+                                        <div><hr class="divider my-4" /></div>                                    
+                                        <p>{{ product.name }}</p>
+                                    </div>
+                                </div>                                                            
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>Vous n'avez aucun produits enregistré dans vos favoris</p>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section> 
 

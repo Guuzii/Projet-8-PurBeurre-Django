@@ -41,6 +41,7 @@ footer {
     box-shadow: 0 -0.5rem 1rem rgba(0, 0, 0, 0.15);
     padding: 1.5rem;
 }
+
 footer p {
     margin: unset;
 }
@@ -61,6 +62,12 @@ footer p {
     display: flex;
     flex-direction: column;
     justify-content: space-between;    
+}
+
+.product-card .searched-product {
+    height: unset;
+    min-height: 350px !important;
+    max-height: 500px !important;
 }
 
 .product-card .product-img {
@@ -87,10 +94,29 @@ footer p {
     left: 0;
 }
 
+.product-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name {
+    font-size: 0.8em;
+}
+
 .save-div {
     position: relative;
     z-index: 15;
     cursor: pointer;
+    max-width: 80%;
+    align-self: center;
+}
+
+.save-div p {
+    margin: unset;
+    padding: 4px;
+    font-size: 0.9em;
+    background-color: black;
+    border-radius: 10px;
 }
 
 .product-detail-img {
@@ -100,5 +126,19 @@ footer p {
 .nutriment-entry {
     display: flex;
     justify-content: space-between;
+}
+
+#save-product-message {
+    position: fixed; 
+    bottom: 0; 
+    z-index: 10000; 
+    color: rgba(255, 255, 255, 0.75); 
+    font-weight: 600; 
+    font-size: 20px; 
+    width: 100%; 
+    height: 40px; 
+    background-color: #c45525;
+    text-align: center;
+    display: none;
 }
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib.auth.models import User
-from .models import Nutriment, Category, Product, ProductCategories, ProductNutriments
+from .models import Nutriment, Category, Product, ProductCategories, ProductNutriments, ProductUsers
 
 class ProductCategoriesInline(admin.TabularInline):
     model = Product.categories.through # the query goes through an intermediate table.
@@ -17,6 +17,13 @@ class ProductNutrimentsInline(admin.TabularInline):
     verbose_name = "Nutriment produit"
     verbose_name_plural = "Nutriments produit"
     readonly_fields = ["nutriment", "quantity"]
+
+class ProductUsersInline(admin.TabularInline):
+    model = Product.users.through # the query goes through an intermediate table.
+    extra = 1
+    verbose_name = "Utilisateur produit"
+    verbose_name_plural = "Utilisateurs produit"
+    # readonly_fields = ["nutriment", "quantity"]
 
 @admin.register(Nutriment)
 class NutrimentAdmin(admin.ModelAdmin):
@@ -36,7 +43,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductCategoriesInline, ProductNutrimentsInline,]
+    inlines = [ProductCategoriesInline, ProductNutrimentsInline, ProductUsersInline]
     search_fields = ['name',]
     list_filter = ['nutri_score', 'categories',]
 
