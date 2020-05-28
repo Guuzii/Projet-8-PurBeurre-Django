@@ -1,6 +1,6 @@
 # from django.http import HttpResponse
 # from django.template import loader
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views import View
 from django.conf import settings
 from django.http import JsonResponse
@@ -100,7 +100,7 @@ class SearchResult(View):
 
         if form.is_valid():
             product_name = form.cleaned_data['product_name']
-            searched_product = Product.objects.filter(name__icontains=product_name).first()
+            searched_product = get_list_or_404(Product, name__icontains=product_name)[0]
             saved_product = []
 
             if searched_product:
@@ -133,7 +133,7 @@ class ProductDetails(View):
     }
 
     def get(self, request, product_id):
-        searched_product = Product.objects.get(id=product_id)
+        searched_product = get_object_or_404(Product, id=product_id)
         product_nutriments = searched_product.nutriments.all()
         clean_nutriments = []
 

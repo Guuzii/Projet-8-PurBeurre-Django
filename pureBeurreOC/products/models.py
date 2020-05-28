@@ -26,7 +26,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField("Nom", max_length=255, unique=True)
     url = models.URLField("Url vers la page OpenFoodFact", max_length=255, unique=True)
-    image_url = models.URLField("Url de l'image", max_length=255, unique=True, null= True)
+    image_url = models.URLField("Url de l'image", max_length=255, unique=True, null=True)
     nutri_score = models.CharField("Score nutritionnel", max_length=1)
     nutriments = models.ManyToManyField('products.Nutriment', through='products.ProductNutriments')
     categories = models.ManyToManyField('products.Category', through='products.ProductCategories')
