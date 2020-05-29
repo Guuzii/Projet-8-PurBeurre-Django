@@ -91,20 +91,17 @@ class SearchResult(View):
     context = {
         'search_form': SearchForm()
     }
-
-    def get(self, request):
-        redirect('home')
-
+    
     def post(self, request):
         form = SearchForm(request.POST)
 
         if form.is_valid():
             product_name = form.cleaned_data['product_name']
-            searched_product = get_list_or_404(Product, name__icontains=product_name)[0]
+            searched_product = Product.objects.filter(name__icontains=product_name).first()
             saved_product = []
 
             if searched_product:
-                substitutes_products = Product.objects.filter(categories=searched_product.categories.first()).exclude(name__exact=searched_product.name).order_by('nutri_score')[:12]
+                substitutes_products = Product.objects.filter(categories=searched_product.categories.first()).exclude(id=searched_product.id).order_by('nutri_score')[:12]
                 
                 if request.user.is_authenticated:
                     if ProductUsers.objects.filter(product=searched_product, user=request.user).exists():
@@ -149,9 +146,6 @@ class ProductDetails(View):
         self.context['product_nutriments'] = clean_nutriments
 
         return render(request, 'products/product-details.html', self.context)
-
-    def post(self, request):
-        return redirect('home')
 
 
 class UserResults(View):
