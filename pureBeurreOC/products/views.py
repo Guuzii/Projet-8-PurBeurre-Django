@@ -35,11 +35,6 @@ class UserView(View):
         self.context['title'] = 'Salut ' + request.user.first_name + ' !'
         self.context['user'] = request.user
         return render(request, self.template_name, self.context)
-    
-    def post(self, request):
-        self.context['title'] = 'Salut ' + request.user.first_name + ' !'
-        self.context['user'] = request.user
-        return render(request, self.template_name, self.context)
 
 
 class UserLogin(LoginView):
@@ -164,9 +159,6 @@ class UserResults(View):
         self.context['title'] = 'Salut ' + request.user.first_name + ' !'
         self.context['products'] = product_list
         return render(request, self.template_name, self.context)
-    
-    def post(self, request):
-        return redirect('home')
 
 
 class UserSaveProduct(View):
