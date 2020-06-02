@@ -24,7 +24,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'guuzii-purbeurre.herokuapp.com'
 ]
-LOGIN_REDIRECT_URL = '/products/'
+LOGIN_REDIRECT_URL = '/'
 
 
 # Application definition
