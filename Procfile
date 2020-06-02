@@ -1,1 +1,1 @@
-web: gunicorn pureBeurreOC.wsgi
+web: gunicorn pureBeurreOC/pureBeurreOC.wsgi
