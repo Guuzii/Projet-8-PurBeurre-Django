@@ -3,9 +3,12 @@ from django.urls import reverse
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.core.management import call_command
 
-from products.models import Category, Product, ProductCategories, ProductUsers
+from products.models import Category, Nutriment, Product, ProductCategories, ProductNutriments, ProductUsers
 from products.forms import UserCreateForm, LoginForm
+
+from io import StringIO
 
 # Homepage page
 class HomePageTestCase(TestCase):
@@ -38,21 +41,44 @@ class SearchResultPage(TestCase):
         search_string = "azerty"
         response = self.client.post(reverse('product-search-results'), { 'product_name': search_string })
         self.assertIsNone(response.context['products'])
+    
+    # test that Search-result page returns context errors, if search-form not valid
+    def test_searchresult_form_invalid(self):
+        search_string = ""
+        response = self.client.post(reverse('product-search-results'), { 'product_name': search_string })
+        self.assertIsNotNone(response.context['errors'])
 
+    # test that Search-result page returns filled saved_product list, if user is_authenticated and has saved product
+    def test_searchresult_page_returns_filled_saved_product_list(self):
+        test_user = User.objects.create_user(username="testuser", password="test123+")
+        self.client.login(username="testuser", password="test123+")
+        ProductUsers.objects.create(product=self.test_product, user=test_user)
+        ProductUsers.objects.create(product=self.test_substitute_product, user=test_user)
 
+        search_string = self.test_product.name
+        response = self.client.post(reverse('product-search-results'), { 'product_name': search_string })
+        self.assertIsNotNone(response.context['saved_product'])
+        self.assertGreater(len(response.context['saved_product']), 0)
+
+    
 # Product-details page
 class ProductDetailsPage(TestCase):
     def setUp(self):
         self.test_product = Product.objects.create(name="Produit test", url="test.fr", nutri_score="c")
-        test_category = Category.objects.create(name="test-category")
-        ProductCategories.objects.create(product=self.test_product, category=test_category)
+        self.test_nutriment = Nutriment.objects.create(name="salt", unit="g")
+        ProductNutriments.objects.create(product=self.test_product, nutriment=self.test_nutriment, quantity=1.5)
 
-    # test that Product-Details page returns a status code 200 and the right product, if product exist
+    # test that Product-Details page returns a status code 200 and the right product with the righ nutriment list, 
+    # if product exist
     def test_searchresult_page_returns_200(self):
         product_id = self.test_product.id
         response = self.client.get(reverse('product-details', args=(product_id,)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['searched_product'], self.test_product)
+        self.assertGreater(len(response.context['product_nutriments']), 0)
+        self.assertEqual(response.context['product_nutriments'][0]['name'], "sel")
+        self.assertEqual(response.context['product_nutriments'][0]['unit'], "g")
+        self.assertEqual(response.context['product_nutriments'][0]['quantity'], 1.5)
         
     # test that Product-Details page returns a status code 404, if product doesn't exist
     def test_searchresult_page_returns_404(self):
@@ -124,7 +150,7 @@ class UserCreatePage(TestCase):
         self.assertTemplateUsed(template_name="products/homepage.html")
 
     # test that User-Create page returns errors context, on post request with invalid form
-    def test_usercreate_page_post_invalid_form(self):
+    def test_usercreate_page_post_invalid_form_weak_password(self):
         response = self.client.post(reverse('user-create'), { 
             'username': "testuserfail", 
             'first_name': "testuser name", 
@@ -133,6 +159,20 @@ class UserCreatePage(TestCase):
             'password2': "123456"
         })
         self.assertIsNotNone(response.context['errors'])
+
+    # test that User-Create page returns errors context, on post request with invalid form with email already existing
+    def test_usercreate_page_form_raise_validation_error_on_email(self):
+        User.objects.create_user(username="testi", password="test123+", email="test@test.fr")
+        form_params = { 
+            'username': "testo", 
+            'first_name': "testuser name", 
+            'email':  "test@test.fr",
+            'password1': "test123+",
+            'password2': "test123+"
+        }
+        form = UserCreateForm(form_params)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(form.has_error('email', 'email'))
 
 
 # User-login page
@@ -175,6 +215,14 @@ class UserLoginPage(TestCase):
         self.assertFalse(response.context['user'].is_authenticated)
 
 
+# User-logout view
+class UserLogoutView(TestCase):
+    # test that User-logout view redirect to home page
+    def test_userlogout_view(self):
+        response = self.client.get(reverse('logout'))
+        self.assertRedirects(response=response, expected_url="/products/")
+
+
 # User-result Page
 class UserResultPage(TestCase):
     def setUp(self):
@@ -209,3 +257,25 @@ class UserDetailsPage(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].username, "testuser")
         self.assertEqual(response.context['user'].email, "test@test.fr")
+
+
+# Models
+class ModelsTest(TestCase):
+    def setUp(self):
+        self.test_product = Product.objects.create(name="Produit test", url="test.fr", nutri_score="a")
+        self.test_category = Category.objects.create(name="test-category")
+        self.test_nutriment = Nutriment.objects.create(name="testNutriment", unit="g")
+
+    # test that Product model return self.name
+    def test__models_returns_self_name(self):
+        self.assertEqual(str(self.test_product), self.test_product.name)
+        self.assertEqual(str(self.test_category), self.test_category.name)
+        self.assertEqual(str(self.test_nutriment), self.test_nutriment.name)
+
+
+# Custom manage.py command database_fill
+class CommandTest(TestCase):
+    def test_command_style(self):
+        out = StringIO()
+        call_command('database_fill', stdout=out)
+        self.assertEquals(out.getvalue().strip(), "PRODUCTS DATAS IMPORTATION DONE")

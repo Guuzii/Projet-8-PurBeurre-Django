@@ -21,13 +21,13 @@ class Command(BaseCommand):
         for nutriment in settings.NUTRIMENTS:
             new_nutriment = Nutriment(name=nutriment, unit=settings.NUTRIMENTS[nutriment]['unit'])
             new_nutriment.save()
-            self.stdout.write("Nouveau nutriment créé : \"" + new_nutriment.name + "\", unité : " + new_nutriment.unit)
+            # self.stdout.write("Nouveau nutriment créé : \"" + new_nutriment.name + "\", unité : " + new_nutriment.unit)
             
 
         for category in settings.PRODUCTS_CATEGORIES:
             new_category = Category(name=category)
             new_category.save()
-            self.stdout.write("Nouvelle catégorie créé : \"" + new_category.name + "\"")
+            # self.stdout.write("Nouvelle catégorie créé : \"" + new_category.name + "\"")
 
         
         for category in settings.PRODUCTS_CATEGORIES:
@@ -114,9 +114,9 @@ class Command(BaseCommand):
 
             i += 1
 
-            self.stdout.write("")
-            self.stdout.write("Produit " + str(i))
-            self.stdout.write("product : " + new_product.name)
-            self.stdout.write("")
+        #     self.stdout.write("")
+        #     self.stdout.write("Produit " + str(i))
+        #     self.stdout.write("product : " + new_product.name)
+        #     self.stdout.write("")
         
-        self.stdout.write("PRODUCTS FOR CATEGORY \"" + product_category + "\" DONE")
+        # self.stdout.write("PRODUCTS FOR CATEGORY \"" + product_category + "\" DONE")

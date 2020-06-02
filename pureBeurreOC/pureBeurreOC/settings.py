@@ -25,9 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 if os.environ.get('ENV') == 'PRODUCTION':
     DEBUG = False
-    SECRET_KEY = '7AG!~N{Pv{AH=-K7;xg]y7(D/YX%W")Bv[5yAE+zhFFq<-4sW='
 
-     # Static files settings
+    # Static files settings
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
     STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
