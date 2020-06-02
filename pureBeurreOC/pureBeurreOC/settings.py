@@ -108,12 +108,20 @@ DATABASES = {
         'PASSWORD': 'J4sp4r075',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    },
+    'prod': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dbge11up3pb3jn',
+        'USER': 'juyqbuocdbzhth',
+        'PASSWORD': 'bc1d9a412abc1082d76969ada51138b20d20acbceb1b037668e449e4872e1ff3',
+        'HOST': 'ec2-54-165-36-134.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
 if os.environ.get('ENV') == 'PRODUCTION':
     db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(db_from_env)
+    DATABASES['prod'].update(db_from_env)
 
 
 # Password validation
