@@ -22,9 +22,9 @@
                                     {% if user.is_authenticated %}
                                         <div class="save-div">
                                             {% if searched_product in saved_product %}
-                                                <p class="text-white" style="background-color: red;" data="{{ searched_product.id }}">Retirer des favoris</p> 
+                                                <p class="text-white" style="background-color: red;" data="{{ searched_product.id }}" page-origin="{{ request.path }}">Retirer des favoris</p> 
                                             {% else %}
-                                                <p class="text-white" style="background-color: green;" data="{{ searched_product.id }}">Ajouter aux favoris</p> 
+                                                <p class="text-white" style="background-color: green;" data="{{ searched_product.id }}" page-origin="{{ request.path }}">Ajouter aux favoris</p> 
                                             {% endif %}
                                         </div>
                                     {% endif %}
@@ -59,9 +59,9 @@
                                         {% if user.is_authenticated %}
                                             <div class="save-div">
                                                 {% if product in saved_product %}
-                                                    <p class="text-white" style="background-color: red;" data="{{ product.id }}">Retirer des favoris</p> 
+                                                    <p class="text-white" style="background-color: red;" data="{{ product.id }}" page-origin="{{ request.path }}">Retirer des favoris</p> 
                                                 {% else %}
-                                                    <p class="text-white" style="background-color: green;" data="{{ product.id }}">Ajouter aux favoris</p> 
+                                                    <p class="text-white" style="background-color: green;" data="{{ product.id }}" page-origin="{{ request.path }}">Ajouter aux favoris</p> 
                                                 {% endif %}
                                             </div>
                                         {% endif %}                                      

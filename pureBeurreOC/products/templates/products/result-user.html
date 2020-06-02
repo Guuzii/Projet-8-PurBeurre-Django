@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-md-12 text-center d-flex flex-wrap">                    
                         {% for product in products %}
-                            <div class="col-md-4 product-card">                                
+                            <div id="product-card-{{ product.id }}" class="col-md-4 product-card">                                
                                 <div class="card-content">
                                     <div class="hover-div" data="{{ product.id }}"></div>
                                     <div class="nutriscore">
@@ -24,9 +24,12 @@
                                     <div class="product-img">                                        
                                         <img src="{{ product.image_url }}" alt="image {{ product.name }}">
                                     </div>
-                                    <div>                                    
+                                    <div class="product-info">                                    
                                         <div><hr class="divider my-4" /></div>                                    
-                                        <p>{{ product.name }}</p>
+                                        <p class="product-name">{{ product.name }}</p>
+                                    </div>
+                                    <div class="save-div">
+                                        <p class="text-white" style="background-color: red;" data="{{ product.id }}" page-origin="{{ request.path }}">Retirer des favoris</p>
                                     </div>
                                 </div>                                                            
                             </div>

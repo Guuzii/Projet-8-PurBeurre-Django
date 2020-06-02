@@ -20,24 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# SECURITY WARNING: keep the secret key used in production secret!
-if os.environ.get('ENV') == 'PRODUCTION':
-    DEBUG = False
-
-    # Static files settings
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-
-    # Extra places for collectstatic to find static files.
-    STATICFILES_DIRS = (
-        os.path.join(PROJECT_ROOT, 'static'),
-    )
-else:
-    DEBUG = True
-    SECRET_KEY = '%!p7ld+l#wxdmmo4u(7@swrvap*$05wom^6!q-flp$w+2#%$t-'
-
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'guuzii-purbeurre.herokuapp.com'
@@ -70,11 +52,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-if os.environ.get('ENV') == 'PRODUCTION':
-    # ...
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'pureBeurreOC.urls'
 INTERNAL_IPS = ['127.0.0.1']
@@ -108,20 +85,8 @@ DATABASES = {
         'PASSWORD': 'J4sp4r075',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-    },
-    'prod': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbge11up3pb3jn',
-        'USER': 'juyqbuocdbzhth',
-        'PASSWORD': 'bc1d9a412abc1082d76969ada51138b20d20acbceb1b037668e449e4872e1ff3',
-        'HOST': 'ec2-54-165-36-134.compute-1.amazonaws.com',
-        'PORT': '5432',
     }
 }
-
-if os.environ.get('ENV') == 'PRODUCTION':
-    db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['prod'].update(db_from_env)
 
 
 # Password validation
@@ -158,8 +123,21 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+# Static files settings
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(BASE_DIR, 'products\\static')
+)
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 
 # Open Food Facts API requests variables
@@ -195,3 +173,17 @@ NUTRIMENTS = {
         "unit": "g"
     }
 }
+
+# PRODUCTION SETTINGS 
+# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: keep the secret key used in production secret!
+if os.environ.get('ENV') == 'PRODUCTION':
+    DEBUG = False
+
+    SECRET_KEY = os.environ.get('SECRET_KEY')    
+    
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
+else:
+    DEBUG = True
+    SECRET_KEY = '%!p7ld+l#wxdmmo4u(7@swrvap*$05wom^6!q-flp$w+2#%$t-'

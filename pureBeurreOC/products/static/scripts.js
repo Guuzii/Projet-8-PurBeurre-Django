@@ -24,6 +24,11 @@ $(".product-card .hover-div").click((e) => {
 
 // AJAX call to save a product for actual user
 $(".save-div p").click((e) => {
+    let pageUrl = $(e.target).attr("page-origin")
+    let pageOrigin = pageUrl.match(new RegExp("[^/][a-z]+-"))[0].replace("-", "");
+
+    console.log(pageOrigin);
+
     $.ajax({
         type: "GET",
         url: '/products/user-save-product/' + $(e.target).attr("data"),
@@ -39,8 +44,13 @@ $(".save-div p").click((e) => {
                 $(e.target).css("background", "red");
             }
             else {
-                $(e.target).text("Ajouter aux favoris");
-                $(e.target).css("background", "green");
+                if (pageOrigin == "user") {
+                    $("#product-card-" + $(e.target).attr("data")).css("display", "none");
+                }
+                else {
+                    $(e.target).text("Ajouter aux favoris");
+                    $(e.target).css("background", "green");
+                }
             }
         }
     });
